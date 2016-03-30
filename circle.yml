@@ -9,4 +9,4 @@ test:
     - ./gradlew :library:check
 
     # copy results
-    - cp -r library/build $CIRCLE_ARTIFACTS
+    - cp -r library/build/reports library/build/outputs $CIRCLE_ARTIFACTS
