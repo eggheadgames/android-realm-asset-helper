@@ -22,6 +22,27 @@ public class RealmAssetHelper {
     }
 
     public void loadDatabaseToStorage(String databaseName) throws RuntimeException {
+        mOsUtil.clearCache();
+
+        if (mOsUtil.isEmpty(databaseName)) {
+            throw new RuntimeException("The database name is empty");
+        }
+
+        if (!mOsUtil.isDatabaseAssetExists(mContext, databaseName)) {
+            throw new RuntimeException("An asset for requested database doesn't exist");
+        }
+
+        Integer currentDbVersion = mOsUtil.getCurrentDbVersion(mContext, databaseName);
+        int assetsDbVersion = mOsUtil.getAssetsDbVersion(mContext, databaseName);
+
+        //fresh install
+        if (currentDbVersion == null) {
+            mOsUtil.loadDatabaseToLocalStorage(mContext, databaseName);
+            mOsUtil.storeDatabaseVersion(mContext, assetsDbVersion, databaseName);
+            if (mListener != null) {
+                mListener.onFreshInstall();
+            }
+        }
 
     }
 
