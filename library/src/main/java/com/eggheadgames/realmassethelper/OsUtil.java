@@ -1,7 +1,6 @@
 package com.eggheadgames.realmassethelper;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
@@ -9,10 +8,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.prefs.Preferences;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class OsUtil {
 
+    public static final String VERSION_PATTERN = "_\\d+\\.realm";
     private String cachedAssetPath;
 
     public void loadDatabaseToLocalStorage(Context context, String databaseName) {
@@ -38,15 +39,24 @@ public class OsUtil {
     }
 
     public Integer getCurrentDbVersion(Context context, String databaseName) {
-        return null;
+        int currentVersion = PreferenceManager.getDefaultSharedPreferences(context).getInt(Constants.PREFERENCES_DB_VERSION + databaseName, -1);
+        return currentVersion == -1 ? null : currentVersion;
     }
 
     public int getAssetsDbVersion(Context context, String databaseName) {
+        String dbAsset = findAsset(context, "", databaseName);
+        Pattern pattern = Pattern.compile(VERSION_PATTERN);
+        Matcher matcher = pattern.matcher(dbAsset);
+
+        if(matcher.find()) {
+            String version = matcher.group().substring(1, matcher.group().indexOf('.'));
+            return Integer.parseInt(version);
+        }
         return 0;
     }
 
     public void storeDatabaseVersion(Context context, int version, String databaseName) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(Constants.PREFERENCES_DB_VERSION + databaseName, version);
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(Constants.PREFERENCES_DB_VERSION + databaseName, version).commit();
     }
 
     public boolean isEmpty(String string) {
@@ -84,7 +94,7 @@ public class OsUtil {
                     //it's a file
                     String fileName = new File(path).getName();
                     if (!TextUtils.isEmpty(fileName)) {
-                        if (fileName.matches(databaseName + "_\\d+\\.realm") || fileName.matches(databaseName + ".realm")) {
+                        if (fileName.matches(databaseName + VERSION_PATTERN) || fileName.matches(databaseName + ".realm")) {
                             cachedAssetPath = path;
                             return path;
                         }

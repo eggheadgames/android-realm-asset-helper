@@ -42,8 +42,21 @@ public class RealmAssetHelper {
             if (mListener != null) {
                 mListener.onFreshInstall();
             }
+        } else {
+            //update required
+            if (assetsDbVersion > currentDbVersion) {
+                mOsUtil.loadDatabaseToLocalStorage(mContext, databaseName);
+                mOsUtil.storeDatabaseVersion(mContext, assetsDbVersion, databaseName);
+                if (mListener != null) {
+                    mListener.onUpdated();
+                }
+                //do not update
+            } else {
+                if (mListener != null) {
+                    mListener.onUpdateIgnored();
+                }
+            }
         }
-
     }
 
     public void setListener (IRealmAssetHelperListener listener) {
