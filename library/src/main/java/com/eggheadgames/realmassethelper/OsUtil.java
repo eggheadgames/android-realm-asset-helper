@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class OsUtil {
 
-    public static final String VERSION_PATTERN = "_\\d+\\.realm";
+    private static final String VERSION_PATTERN = "_\\d+\\.realm";
     private String cachedAssetPath;
 
     public void loadDatabaseToLocalStorage(Context context, String databaseName) {

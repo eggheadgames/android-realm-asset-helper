@@ -1,5 +1,5 @@
 package com.eggheadgames.realmassethelper;
 
-public interface Constants {
+interface Constants {
     String PREFERENCES_DB_VERSION = "db_version_";
 }

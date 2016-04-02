@@ -3,8 +3,11 @@ package com.eggheadgames.realmassethelper;
 import android.content.Context;
 
 public class RealmAssetHelper {
+    @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     protected static RealmAssetHelper instance = new RealmAssetHelper();
+    @SuppressWarnings("WeakerAccess")
     protected Context mContext;
+    @SuppressWarnings("WeakerAccess")
     protected OsUtil mOsUtil;
     private IRealmAssetHelperListener mListener;
 
@@ -12,12 +15,14 @@ public class RealmAssetHelper {
      *
      * Please consider using Application Context as a @param context
      */
+    @SuppressWarnings("unused")
     public static RealmAssetHelper getInstance(Context context) {
         instance.mContext = context;
         instance.mOsUtil = new OsUtil();
         return instance;
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected RealmAssetHelper() {
     }
 
