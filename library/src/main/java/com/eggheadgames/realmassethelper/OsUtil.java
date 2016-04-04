@@ -11,17 +11,20 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+
 public class OsUtil {
 
     private static final String VERSION_PATTERN = "_\\d+\\.realm";
     private String cachedAssetPath;
 
-    public void loadDatabaseToLocalStorage(Context context, String databaseName) {
+    public String loadDatabaseToLocalStorage(Context context, String databaseName) {
         String asset = findAsset(context, "", databaseName);
 
-        File f = new File(context.getFilesDir() + File.separator + databaseName);
-        if (f.exists()) {
-            f.delete();
+        File file = new File(generateDatabaseFileName(context, databaseName));
+        if (file.exists()) {
+            file.delete();
         }
         try {
             InputStream is = context.getAssets().open(asset);
@@ -30,12 +33,22 @@ public class OsUtil {
             is.read(buffer);
             is.close();
 
-            FileOutputStream fos = new FileOutputStream(f);
+            FileOutputStream fos = new FileOutputStream(file);
             fos.write(buffer);
             fos.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        return file.getName();
+    }
+
+    public String generateDatabaseFileName(Context context, String databaseName) {
+        return context.getFilesDir() + File.separator + databaseName + ".realm";
+    }
+
+    public String getFileNameForDatabase(Context context, String databaseName) {
+        return new File(generateDatabaseFileName(context, databaseName)).getName();
     }
 
     public Integer getCurrentDbVersion(Context context, String databaseName) {
@@ -106,4 +119,9 @@ public class OsUtil {
             return null;
         }
     }
+
+    public Realm createDatabaseFromLoadedFile(RealmConfiguration realmConfiguration) {
+        return Realm.getInstance(realmConfiguration);
+    }
+
 }
