@@ -108,7 +108,8 @@ public class RealmAssetHelper {
      * or assets with specified name not found,
      * or an error occurred during Realm database instantiation
      */
-    public void loadDatabase(@SuppressWarnings("SameParameterValue") String databaseName, final RealmConfiguration realmConfiguration, @SuppressWarnings("SameParameterValue") final IRealmAssetHelperLoaderListener listener) throws RuntimeException {
+    @SuppressWarnings("SameParameterValue")
+    public void loadDatabase( String databaseName, final RealmConfiguration realmConfiguration, final IRealmAssetHelperLoaderListener listener) throws RuntimeException {
         loadDatabaseToStorage(databaseName, new IRealmAssetHelperStorageListener() {
             @Override
             public void onLoadedToStorage(String filePath, RealmAssetHelperStatus status) {

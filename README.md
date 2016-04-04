@@ -40,6 +40,50 @@ dependencies {
 ```
 
 
+## Example
+
+To load an asset to the file system you should have an asset file called `<databaseName>_<XX>.realm` (in any folder in the asset directory, we have a recursive search).
+Where 
+`databaseName` is the name of your database
+`XX` database version
+
+Here is how it can be used for an asset file `exampledb_12.realm`
+
+```
+RealmAssetHelper.getInstance(context).loadDatabaseToStorage("exampledb", new IRealmAssetHelperStorageListener() {
+    @Override
+    public void onLoadedToStorage(String filePath, RealmAssetHelperStatus status) {
+        //initialize your database using filePath as a file name here
+    }
+});
+```
+
+`RealmAssetHelperStatus` enum will help you to determine whether database was updated or not.
+
+`RealmAssetHelperStatus.INSTALLED` - database newly installed
+`RealmAssetHelperStatus.UPDATED` - database updated
+`RealmAssetHelperStatus.IGNORED` - database version didn't change
+
+There is also an option to instantiate a Realm database within a library. 
+
+```
+RealmAssetHelper.getInstance(context).loadDatabase("exampledb", realmConfiguration, new IRealmAssetHelperLoaderListener() {
+    @Override
+    public void onDatabaseLoaded(Realm database, RealmAssetHelperStatus status) {
+        
+    }
+});
+```
+
+`realmConfiguration` is an instance of RealmConfiguration where you can set all required parameters. 
+As a file name for RealmConfiguration please use a value of the 
+
+```
+RealmAssetHelper.getFileNameForDatabase(context, databaseName);
+```
+
+to get the file name where database asset will be stored on the file system
+
 ## Status
 
 Work commenced on this library Mar 30, 2016 and is expected to have a first version shortly. 
