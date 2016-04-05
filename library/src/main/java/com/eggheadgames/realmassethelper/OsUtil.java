@@ -11,9 +11,6 @@ import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-
 public class OsUtil {
 
     private static final String VERSION_PATTERN = "_\\d+\\.realm";
@@ -119,9 +116,4 @@ public class OsUtil {
             return null;
         }
     }
-
-    public Realm createDatabaseFromLoadedFile(RealmConfiguration realmConfiguration) {
-        return Realm.getInstance(realmConfiguration);
-    }
-
 }

@@ -64,26 +64,6 @@ RealmAssetHelper.getInstance(context).loadDatabaseToStorage("exampledb", new IRe
 `RealmAssetHelperStatus.UPDATED` - database updated
 `RealmAssetHelperStatus.IGNORED` - database version didn't change
 
-There is also an option to instantiate a Realm database within a library. 
-
-```
-RealmAssetHelper.getInstance(context).loadDatabase("exampledb", realmConfiguration, new IRealmAssetHelperLoaderListener() {
-    @Override
-    public void onDatabaseLoaded(Realm database, RealmAssetHelperStatus status) {
-        
-    }
-});
-```
-
-`realmConfiguration` is an instance of RealmConfiguration where you can set all required parameters. 
-As a file name for RealmConfiguration please use a value of the 
-
-```
-RealmAssetHelper.getFileNameForDatabase(context, databaseName);
-```
-
-to get the file name where database asset will be stored on the file system
-
 ## Status
 
 Work commenced on this library Mar 30, 2016 and is expected to have a first version shortly. 

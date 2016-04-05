@@ -11,9 +11,6 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import io.realm.RealmConfiguration;
-
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -160,13 +157,5 @@ public class RealmAssetHelperTest {
 
         when(osUtil.loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString())).thenReturn(null);
         realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, null);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test(expected = RuntimeException.class)
-    public void onLoadDatabaseWithRealmError_exceptionShouldBeThrown() {
-        when(osUtil.createDatabaseFromLoadedFile(any(RealmConfiguration.class))).thenThrow(RuntimeException.class);
-
-        realmAssetHelper.loadDatabase(TestConstants.DB_NAME, any(RealmConfiguration.class), null);
     }
 }
