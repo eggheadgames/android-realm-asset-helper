@@ -32,7 +32,7 @@ Realm realm;
 
 RealmAssetHelper.getInstance(context).loadDatabaseToStorage("appdata", new IRealmAssetHelperStorageListener() {
     @Override
-    public void onLoadedToStorage(String filePath, RealmAssetHelperStatus status) {
+    public void onLoadedToStorage(String realmDbName, RealmAssetHelperStatus status) {
                 realmConfig = new RealmConfiguration.Builder(context)
                         .name(realmDbName)
                         .build();
@@ -58,7 +58,7 @@ Store it somewhere in `assets` with the name `products_3.realm`, then load it wi
 ```java
 RealmAssetHelper.getInstance(context).loadDatabaseToStorage("products", new IRealmAssetHelperStorageListener() {
     @Override
-    public void onLoadedToStorage(String filePath, RealmAssetHelperStatus status) {
+    public void onLoadedToStorage(String realmDbName, RealmAssetHelperStatus status) {
                 realmConfig = new RealmConfiguration.Builder(context)
                         .name(realmDbName)
                         .build();
