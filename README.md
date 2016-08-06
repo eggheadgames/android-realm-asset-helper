@@ -91,7 +91,7 @@ Add a dependency to your application related `build.gradle`
 
 ```gradle
 dependencies {
-    compile 'com.github.eggheadgames:android-realm-asset-helper'
+    compile 'com.github.eggheadgames:android-realm-asset-helper:1.2.0'
 }
 ```
 
