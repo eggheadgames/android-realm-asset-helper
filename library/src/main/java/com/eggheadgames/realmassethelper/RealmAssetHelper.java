@@ -11,7 +11,6 @@ public class RealmAssetHelper {
     protected OsUtil mOsUtil;
 
     /**
-     *
      * Please consider using Application Context as a @param context
      */
     @SuppressWarnings("unused")
@@ -28,35 +27,36 @@ public class RealmAssetHelper {
     /**
      * Loads an asset to the file system.
      * Path to the file will be returned via a callback
-     *
+     * <p>
      * P.S. The file will be stored by the following path:
      * context.getFilesDir() + File.separator + databaseName + ".realm"
      *
-     * @param databaseName a database name without version and file extension.
-     *                     e.g. if you have an asset file data/testdatabase_15.realm
-     *                     then you should specify testdatabase as a databaseName
-     * @param listener will notify about the status and return an instance of Realm database if there is no error
+     * @param databaseName   a database name without version and file extension.
+     *                       e.g. if you have an asset file data/testdatabase_15.realm
+     *                       then you should specify testdatabase as a databaseName
+     * @param databaseFolder name of folder where database is located
+     * @param listener       will notify about the status and return an instance of Realm database if there is no error
      * @throws RuntimeException in case if specified databaseName is empty,
-     * or assets with specified name not found,
-     * or file was not written to the filesystem
+     *                          or assets with specified name not found,
+     *                          or file was not written to the filesystem
      */
-    public void loadDatabaseToStorage(String databaseName, IRealmAssetHelperStorageListener listener) throws RuntimeException {
+    public void loadDatabaseToStorage(String databaseFolder, String databaseName, IRealmAssetHelperStorageListener listener) throws RuntimeException {
         mOsUtil.clearCache();
 
         if (mOsUtil.isEmpty(databaseName)) {
             throw new RuntimeException("The database name is empty");
         }
 
-        if (!mOsUtil.isDatabaseAssetExists(mContext, databaseName)) {
+        if (!mOsUtil.isDatabaseAssetExists(mContext, databaseFolder, databaseName)) {
             throw new RuntimeException("An asset for requested database doesn't exist");
         }
 
         Integer currentDbVersion = mOsUtil.getCurrentDbVersion(mContext, databaseName);
-        int assetsDbVersion = mOsUtil.getAssetsDbVersion(mContext, databaseName);
+        int assetsDbVersion = mOsUtil.getAssetsDbVersion(mContext, databaseFolder, databaseName);
 
         //fresh install
         if (currentDbVersion == null) {
-            String path = mOsUtil.loadDatabaseToLocalStorage(mContext, databaseName);
+            String path = mOsUtil.loadDatabaseToLocalStorage(mContext, databaseFolder, databaseName);
             if (mOsUtil.isEmpty(path)) {
                 throw new RuntimeException("Can't find copied file");
             }
@@ -67,7 +67,7 @@ public class RealmAssetHelper {
         } else {
             //update required
             if (assetsDbVersion > currentDbVersion) {
-                String path = mOsUtil.loadDatabaseToLocalStorage(mContext, databaseName);
+                String path = mOsUtil.loadDatabaseToLocalStorage(mContext, databaseFolder, databaseName);
                 if (mOsUtil.isEmpty(path)) {
                     throw new RuntimeException("Can't find copied file");
                 }
