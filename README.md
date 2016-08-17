@@ -23,14 +23,14 @@ It is actively maintained and used by [Egghead Games](http://eggheadgames.com) f
 
 In this simplest scenario, the library handles locating and copying the realm file from your apk into the Android file system so it is ready to use.
 
-Say your app has a single Realm database that ships with some sample data. You need to copy that database on first install so it is ready to use in your app. Store your file called, say, `appdata.realm` in your `assets` folder and include code like this:
+Say your app has a single Realm database that ships with some sample data. You need to copy that database on first install so it is ready to use in your app. Store your file called, say, `appdata.realm` in your `assets/data` folder and include code like this:
 
 ```java
 import com.eggheadgames.realmassethelper;
 
 Realm realm;
 
-RealmAssetHelper.getInstance(context).loadDatabaseToStorage("appdata", new IRealmAssetHelperStorageListener() {
+RealmAssetHelper.getInstance(context).loadDatabaseToStorage("data", "appdata", new IRealmAssetHelperStorageListener() {
     @Override
     public void onLoadedToStorage(String realmDbName, RealmAssetHelperStatus status) {
                 realmConfig = new RealmConfiguration.Builder(context)
@@ -43,9 +43,9 @@ RealmAssetHelper.getInstance(context).loadDatabaseToStorage("appdata", new IReal
 ```
 This will:
 
- * find `appdata.realm` by recursively searching `assets`
+ * find `appdata.realm` in `assets/data` folder
  * see if there is an existing `appdata.realm` already installed
- * copy the `appdata.realm` from `assets` only if no pre-existing file is found
+ * copy the `appdata.realm` from `assets/data` only if no pre-existing file is found
  * return the realm file name and status
 
 ## Read-only Data Example
@@ -53,10 +53,10 @@ This will:
 Another scenario is where you include a large amount of data to use read-only in your application, such as product catalogue information or game level data.
 
 Say you have the 3rd version of your company's `products.realm` database to ship with your latest apk. 
-Store it somewhere in `assets` with the name `products_3.realm`, then load it with:
+Store it in `assets/data` with the name `products_3.realm`, then load it with:
 
 ```java
-RealmAssetHelper.getInstance(context).loadDatabaseToStorage("products", new IRealmAssetHelperStorageListener() {
+RealmAssetHelper.getInstance(context).loadDatabaseToStorage("data", "products", new IRealmAssetHelperStorageListener() {
     @Override
     public void onLoadedToStorage(String realmDbName, RealmAssetHelperStatus status) {
                 realmConfig = new RealmConfiguration.Builder(context)
@@ -70,7 +70,7 @@ RealmAssetHelper.getInstance(context).loadDatabaseToStorage("products", new IRea
 
 This will:
 
- * find the `products_3.realm` by recursively searching `assets`
+ * find the `products_3.realm` in `assets/data` folder
  * see if there is an existing `products.realm` installed and check a sharedPreference value to see what version it is
  * copy the realm data if it is newer (removing the `_3`)
  * return the realm file name and status
@@ -91,7 +91,7 @@ Add a dependency to your application related `build.gradle`
 
 ```gradle
 dependencies {
-    compile 'com.github.eggheadgames:android-realm-asset-helper:1.2.0'
+    compile 'com.github.eggheadgames:android-realm-asset-helper:1.3.0'
 }
 ```
 
