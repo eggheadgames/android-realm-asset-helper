@@ -16,8 +16,8 @@ public class OsUtil {
     private static final String VERSION_PATTERN = "_\\d+\\.realm";
     private String cachedAssetPath;
 
-    public String loadDatabaseToLocalStorage(Context context, String databaseName) {
-        String asset = findAsset(context, "", databaseName);
+    public String loadDatabaseToLocalStorage(Context context, String databaseFolder, String databaseName) {
+        String asset = findAsset(context, databaseFolder, databaseName);
 
         File file = new File(generateDatabaseFileName(context, databaseName));
         if (file.exists()) {
@@ -53,12 +53,12 @@ public class OsUtil {
         return currentVersion == -1 ? null : currentVersion;
     }
 
-    public int getAssetsDbVersion(Context context, String databaseName) {
-        String dbAsset = findAsset(context, "", databaseName);
+    public int getAssetsDbVersion(Context context, String databaseFolder, String databaseName) {
+        String dbAsset = findAsset(context, databaseFolder, databaseName);
         Pattern pattern = Pattern.compile(VERSION_PATTERN);
         Matcher matcher = pattern.matcher(dbAsset);
 
-        if(matcher.find()) {
+        if (matcher.find()) {
             String version = matcher.group().substring(1, matcher.group().indexOf('.'));
             return Integer.parseInt(version);
         }
@@ -76,8 +76,8 @@ public class OsUtil {
     /**
      * expected asset name <databaseName>_xx.realm or <databaseName>.realm
      */
-    public boolean isDatabaseAssetExists(Context context, String databaseName) {
-        return !TextUtils.isEmpty(findAsset(context, "", databaseName));
+    public boolean isDatabaseAssetExists(Context context, String databaseFolder, String databaseName) {
+        return !TextUtils.isEmpty(findAsset(context, databaseFolder, databaseName));
     }
 
     public void clearCache() {
@@ -93,20 +93,11 @@ public class OsUtil {
                 list = context.getAssets().list(path);
                 if (list.length > 0) {
                     for (String file : list) {
-                        String asset = findAsset(context,
-                                TextUtils.isEmpty(path) ? file : path + File.separator + file,
-                                databaseName);
-                        if (!TextUtils.isEmpty(asset)) {
-                            return asset;
-                        }
-                    }
-                } else {
-                    //it's a file
-                    String fileName = new File(path).getName();
-                    if (!TextUtils.isEmpty(fileName)) {
-                        if (fileName.matches(databaseName + VERSION_PATTERN) || fileName.matches(databaseName + ".realm")) {
-                            cachedAssetPath = path;
-                            return path;
+                        if (!TextUtils.isEmpty(file)) {
+                            if (file.matches(databaseName + VERSION_PATTERN) || file.matches(databaseName + ".realm")) {
+                                cachedAssetPath = path + File.separator + file;
+                                return path;
+                            }
                         }
                     }
                 }

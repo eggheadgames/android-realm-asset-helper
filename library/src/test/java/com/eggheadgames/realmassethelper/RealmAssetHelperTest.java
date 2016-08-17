@@ -38,9 +38,9 @@ public class RealmAssetHelperTest {
                 return string == null || string.isEmpty();
             }
         });
-        Mockito.when(osUtil.isDatabaseAssetExists(Mockito.any(Context.class), Mockito.anyString())).thenReturn(true);
+        Mockito.when(osUtil.isDatabaseAssetExists(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(true);
 
-        Mockito.when(osUtil.loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString())).thenReturn(TestConstants.FILE_PATH);
+        Mockito.when(osUtil.loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(TestConstants.FILE_PATH);
 
         Mockito.when(osUtil.generateDatabaseFileName(Mockito.any(Context.class), Mockito.anyString())).thenReturn(TestConstants.FILE_PATH);
 
@@ -50,23 +50,23 @@ public class RealmAssetHelperTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void onEmptyDatabaseName_shouldThrowRuntimeException() throws RuntimeException{
-        realmAssetHelper.loadDatabaseToStorage(null, null);
+    public void onEmptyDatabaseName_shouldThrowRuntimeException() throws RuntimeException {
+        realmAssetHelper.loadDatabaseToStorage(null, null, null);
     }
 
     @Test(expected = RuntimeException.class)
-    public void onMissingDbAsset_shouldThrowRuntimeException() throws RuntimeException{
-        Mockito.when(osUtil.isDatabaseAssetExists(context, TestConstants.DB_NAME)).thenReturn(false);
+    public void onMissingDbAsset_shouldThrowRuntimeException() throws RuntimeException {
+        Mockito.when(osUtil.isDatabaseAssetExists(context, TestConstants.DB_FOLDER, TestConstants.DB_NAME)).thenReturn(false);
 
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, null);
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, null);
     }
 
     @Test
     public void onFreshInstall_databaseVersionShouldBeStored() {
         Mockito.when(osUtil.getCurrentDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(null);
-        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(2);
+        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(2);
 
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, null);
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, null);
 
         Mockito.verify(osUtil, Mockito.times(1)).storeDatabaseVersion(context, 2, TestConstants.DB_NAME);
     }
@@ -74,9 +74,9 @@ public class RealmAssetHelperTest {
     @Test
     public void onDatabaseUpdate_databaseVersionShouldBeStored() {
         Mockito.when(osUtil.getCurrentDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(1);
-        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(2);
+        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(2);
 
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, null);
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, null);
 
         Mockito.verify(osUtil, Mockito.times(1)).storeDatabaseVersion(context, 2, TestConstants.DB_NAME);
     }
@@ -85,28 +85,28 @@ public class RealmAssetHelperTest {
     public void onFreshAppInstall_databaseShouldBeLoadedToInternalStorage() {
         Mockito.when(osUtil.getCurrentDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(null);
 
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, null);
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, null);
 
-        Mockito.verify(osUtil, Mockito.times(1)).loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString());
+        Mockito.verify(osUtil, Mockito.times(1)).loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString());
     }
 
     @Test
     public void onDatabaseUpdate_databaseShouldBeLoadedToInternalStorage() {
         Mockito.when(osUtil.getCurrentDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(1);
-        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(2);
+        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(2);
 
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, null);
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, null);
 
-        Mockito.verify(osUtil, Mockito.times(1)).loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString());
+        Mockito.verify(osUtil, Mockito.times(1)).loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString());
     }
 
     @Test
     public void onSameDatabaseVersionArrived_databaseShouldNotBeLoadedToInternalStorage() {
         Mockito.when(osUtil.getCurrentDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(2);
-        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(2);
+        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(2);
 
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, null);
-        Mockito.verify(osUtil, Mockito.never()).loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString());
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, null);
+        Mockito.verify(osUtil, Mockito.never()).loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString());
     }
 
     @Test
@@ -114,7 +114,7 @@ public class RealmAssetHelperTest {
         IRealmAssetHelperStorageListener listener = Mockito.mock(IRealmAssetHelperStorageListener.class);
         Mockito.when(osUtil.getCurrentDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(null);
 
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, listener);
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, listener);
 
         Mockito.verify(listener, Mockito.times(1)).onLoadedToStorage(TestConstants.FILE_PATH, RealmAssetHelperStatus.INSTALLED);
     }
@@ -123,9 +123,9 @@ public class RealmAssetHelperTest {
     public void onDatabaseUpdate_relevantCallbackShouldBeTriggered() {
         IRealmAssetHelperStorageListener listener = Mockito.mock(IRealmAssetHelperStorageListener.class);
         Mockito.when(osUtil.getCurrentDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(1);
-        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(2);
+        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(2);
 
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, listener);
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, listener);
 
         Mockito.verify(listener, Mockito.times(1)).onLoadedToStorage(TestConstants.FILE_PATH, RealmAssetHelperStatus.UPDATED);
     }
@@ -134,9 +134,9 @@ public class RealmAssetHelperTest {
     public void onSameDatabaseVersionArrived_relevantCallbackShouldBeTriggered() {
         IRealmAssetHelperStorageListener listener = Mockito.mock(IRealmAssetHelperStorageListener.class);
         Mockito.when(osUtil.getCurrentDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(2);
-        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(2);
+        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(2);
 
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, listener);
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, listener);
         Mockito.verify(listener, Mockito.times(1)).onLoadedToStorage(TestConstants.FILE_PATH, RealmAssetHelperStatus.IGNORED);
     }
 
@@ -144,18 +144,18 @@ public class RealmAssetHelperTest {
     public void onDatabaseUpdate_versionShouldBeSetForCorrectDatabase() {
 
         Mockito.when(osUtil.getCurrentDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(1);
-        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(2);
+        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(2);
 
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, null);
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, null);
         Mockito.verify(osUtil, Mockito.times(1)).storeDatabaseVersion(context, 2, TestConstants.DB_NAME);
     }
 
     @Test(expected = RuntimeException.class)
     public void onLoadDatabaseToStorageFileNotFound_exceptionShouldBeThrown() {
         Mockito.when(osUtil.getCurrentDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(1);
-        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString())).thenReturn(2);
+        Mockito.when(osUtil.getAssetsDbVersion(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(2);
 
-        when(osUtil.loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString())).thenReturn(null);
-        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_NAME, null);
+        when(osUtil.loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(null);
+        realmAssetHelper.loadDatabaseToStorage(TestConstants.DB_FOLDER, TestConstants.DB_NAME, null);
     }
 }
