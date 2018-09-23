@@ -25,7 +25,7 @@ public class OsUtil {
         }
         try {
             InputStream is = context.getAssets().open(asset);
-            byte[] buffer = new byte[10240];
+            byte[] buffer = new byte[1024];
             FileOutputStream fos = new FileOutputStream(file);
             
             int length = 0;
