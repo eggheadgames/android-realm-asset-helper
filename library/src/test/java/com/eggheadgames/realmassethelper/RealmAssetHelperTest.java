@@ -42,8 +42,6 @@ public class RealmAssetHelperTest {
 
         Mockito.when(osUtil.loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(TestConstants.FILE_PATH);
 
-        Mockito.when(osUtil.generateDatabaseFileName(Mockito.any(Context.class), Mockito.anyString())).thenReturn(TestConstants.FILE_PATH);
-
         Mockito.when(osUtil.getFileNameForDatabase(Mockito.any(Context.class), Mockito.anyString())).thenReturn(TestConstants.FILE_PATH);
 
         realmAssetHelper.mOsUtil = osUtil;
