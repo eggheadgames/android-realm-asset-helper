@@ -31,7 +31,7 @@ public class RealmAssetHelperTest {
         realmAssetHelper = spy(new RealmAssetHelper());
         realmAssetHelper.mContext = context;
 
-        Mockito.when(osUtil.isEmpty(Mockito.anyString())).thenAnswer(new Answer<Boolean>() {
+        Mockito.when(osUtil.isEmpty(Mockito.<String>any())).thenAnswer(new Answer<Boolean>() {
             @Override
             public Boolean answer(InvocationOnMock invocation) throws Throwable {
                 String string = (String) invocation.getArguments()[0];
