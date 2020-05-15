@@ -69,7 +69,7 @@ public class OsUtil {
     }
 
     public void storeDatabaseVersion(Context context, int version, String databaseName) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(Constants.PREFERENCES_DB_VERSION + databaseName, version).commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(Constants.PREFERENCES_DB_VERSION + databaseName, version).apply();
     }
 
     public boolean isEmpty(String string) {
