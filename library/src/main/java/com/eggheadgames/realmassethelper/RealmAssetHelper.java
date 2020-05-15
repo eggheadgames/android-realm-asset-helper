@@ -4,7 +4,7 @@ import android.content.Context;
 
 public class RealmAssetHelper {
     @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
-    protected static RealmAssetHelper instance = new RealmAssetHelper();
+    protected static final RealmAssetHelper instance = new RealmAssetHelper();
     @SuppressWarnings("WeakerAccess")
     protected Context mContext;
     @SuppressWarnings("WeakerAccess")
