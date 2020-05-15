@@ -21,7 +21,10 @@ public class OsUtil {
 
         File file = new File(generateDatabaseFileName(context, databaseName));
         if (file.exists()) {
-            file.delete();
+            boolean delete = file.delete();
+            if (!delete) {
+                throw new RuntimeException("Can not remove old database");
+            }
         }
         try {
             InputStream is = context.getAssets().open(asset);
