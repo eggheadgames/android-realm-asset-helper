@@ -31,7 +31,7 @@ public class RealmAssetHelperTest {
         realmAssetHelper = spy(new RealmAssetHelper());
         realmAssetHelper.mContext = context;
 
-        Mockito.when(osUtil.isEmpty(Mockito.anyString())).thenAnswer(new Answer<Boolean>() {
+        Mockito.when(osUtil.isEmpty(Mockito.<String>any())).thenAnswer(new Answer<Boolean>() {
             @Override
             public Boolean answer(InvocationOnMock invocation) throws Throwable {
                 String string = (String) invocation.getArguments()[0];
@@ -41,8 +41,6 @@ public class RealmAssetHelperTest {
         Mockito.when(osUtil.isDatabaseAssetExists(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(true);
 
         Mockito.when(osUtil.loadDatabaseToLocalStorage(Mockito.any(Context.class), Mockito.anyString(), Mockito.anyString())).thenReturn(TestConstants.FILE_PATH);
-
-        Mockito.when(osUtil.generateDatabaseFileName(Mockito.any(Context.class), Mockito.anyString())).thenReturn(TestConstants.FILE_PATH);
 
         Mockito.when(osUtil.getFileNameForDatabase(Mockito.any(Context.class), Mockito.anyString())).thenReturn(TestConstants.FILE_PATH);
 
