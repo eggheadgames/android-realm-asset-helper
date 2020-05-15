@@ -96,11 +96,10 @@ public class OsUtil {
                 list = context.getAssets().list(path);
                 if (list.length > 0) {
                     for (String file : list) {
-                        if (!TextUtils.isEmpty(file)) {
-                            if (file.matches(databaseName + VERSION_PATTERN) || file.matches(databaseName + ".realm")) {
-                                cachedAssetPath = path + File.separator + file;
-                                return path;
-                            }
+                        if (!TextUtils.isEmpty(file) &&
+                                (file.matches(databaseName + VERSION_PATTERN) || file.matches(databaseName + ".realm"))) {
+                            cachedAssetPath = path + File.separator + file;
+                            return path;
                         }
                     }
                 }
