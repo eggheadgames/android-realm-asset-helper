@@ -28,13 +28,15 @@ public class OsUtil {
         }
         try {
             InputStream is = context.getAssets().open(asset);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-
+            byte[] buffer = new byte[1024];
             FileOutputStream fos = new FileOutputStream(file);
-            fos.write(buffer);
+            
+            int length = 0;
+            while ((length = is.read(buffer)) >= 0) {
+                fos.write(buffer, 0, length);
+            } 
+            
+            is.close();
             fos.close();
         } catch (Exception e) {
             throw new RuntimeException(e);
