@@ -1,26 +1,24 @@
 package com.eggheadgames.realmassethelper;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 public class RealmAssetHelper {
-    @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
-    protected static RealmAssetHelper instance = new RealmAssetHelper();
-    @SuppressWarnings("WeakerAccess")
+    @SuppressLint("StaticFieldLeak")
+    protected static final RealmAssetHelper instance = new RealmAssetHelper();
     protected Context mContext;
-    @SuppressWarnings("WeakerAccess")
     protected OsUtil mOsUtil;
 
     /**
      * Please consider using Application Context as a @param context
      */
-    @SuppressWarnings("unused")
     public static RealmAssetHelper getInstance(Context context) {
-        instance.mContext = context;
+        Context applicationContext = context.getApplicationContext();
+        instance.mContext = applicationContext == null ? context : applicationContext;
         instance.mOsUtil = new OsUtil();
         return instance;
     }
 
-    @SuppressWarnings("WeakerAccess")
     protected RealmAssetHelper() {
     }
 

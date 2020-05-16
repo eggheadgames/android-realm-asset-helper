@@ -21,7 +21,10 @@ public class OsUtil {
 
         File file = new File(generateDatabaseFileName(context, databaseName));
         if (file.exists()) {
-            file.delete();
+            boolean delete = file.delete();
+            if (!delete) {
+                throw new RuntimeException("Can not remove old database");
+            }
         }
         try {
             InputStream is = context.getAssets().open(asset);
@@ -68,7 +71,7 @@ public class OsUtil {
     }
 
     public void storeDatabaseVersion(Context context, int version, String databaseName) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(Constants.PREFERENCES_DB_VERSION + databaseName, version).commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(Constants.PREFERENCES_DB_VERSION + databaseName, version).apply();
     }
 
     public boolean isEmpty(String string) {
@@ -95,11 +98,10 @@ public class OsUtil {
                 list = context.getAssets().list(path);
                 if (list.length > 0) {
                     for (String file : list) {
-                        if (!TextUtils.isEmpty(file)) {
-                            if (file.matches(databaseName + VERSION_PATTERN) || file.matches(databaseName + ".realm")) {
-                                cachedAssetPath = path + File.separator + file;
-                                return path;
-                            }
+                        if (!TextUtils.isEmpty(file) &&
+                                (file.matches(databaseName + VERSION_PATTERN) || file.matches(databaseName + ".realm"))) {
+                            cachedAssetPath = path + File.separator + file;
+                            return path;
                         }
                     }
                 }
