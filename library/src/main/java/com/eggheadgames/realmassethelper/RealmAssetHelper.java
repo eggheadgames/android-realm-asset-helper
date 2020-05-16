@@ -5,17 +5,13 @@ import android.content.Context;
 
 public class RealmAssetHelper {
     @SuppressLint("StaticFieldLeak")
-    @SuppressWarnings({"WeakerAccess", "CanBeFinal"})
     protected static final RealmAssetHelper instance = new RealmAssetHelper();
-    @SuppressWarnings("WeakerAccess")
     protected Context mContext;
-    @SuppressWarnings("WeakerAccess")
     protected OsUtil mOsUtil;
 
     /**
      * Please consider using Application Context as a @param context
      */
-    @SuppressWarnings("unused")
     public static RealmAssetHelper getInstance(Context context) {
         Context applicationContext = context.getApplicationContext();
         instance.mContext = applicationContext == null ? context : applicationContext;
@@ -23,7 +19,6 @@ public class RealmAssetHelper {
         return instance;
     }
 
-    @SuppressWarnings("WeakerAccess")
     protected RealmAssetHelper() {
     }
 
