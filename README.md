@@ -3,6 +3,9 @@
 <a target="_blank" href="https://android-arsenal.com/api?level=15"><img src="https://img.shields.io/badge/API-15%2B-orange.svg"></a>
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/eggheadgames/android-realm-asset-helper/blob/master/LICENSE)
 
+_I'm archiving this repro as 1) Realm is now deprecated by MongoDB, but equally importantly, 2) this functionality was built into the Realm Android SDK at [some stage](https://github.com/eggheadgames/android-realm-asset-helper/issues/14#issuecomment-713329133)._
+
+_I hope this was useful to a few of you!_
 
 # Android Realm Asset Helper
 
